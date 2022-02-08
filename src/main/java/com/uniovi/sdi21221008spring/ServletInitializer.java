@@ -1,4 +1,4 @@
-package com.example.sdi21221008spring;
+package com.uniovi.sdi21221008spring;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
