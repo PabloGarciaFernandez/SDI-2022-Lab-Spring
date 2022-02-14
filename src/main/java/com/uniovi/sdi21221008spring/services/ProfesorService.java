@@ -1,5 +1,6 @@
 package com.uniovi.sdi21221008spring.services;
 
+import com.uniovi.sdi21221008spring.entities.Mark;
 import com.uniovi.sdi21221008spring.entities.Profesor;
 import com.uniovi.sdi21221008spring.repositories.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +14,29 @@ import java.util.List;
 public class ProfesorService {
     @Autowired
     private ProfesorRepository profesorRepository;
-    private List<Profesor> profesors= new ArrayList<Profesor>();
 
     @PostConstruct
     public void init(){
-        profesors.add(new Profesor("19293","Pablo","Garcia","ingles",1L));
-        profesors.add(new Profesor("12213123","Alberto","Garcia","ingles",2L));
+        profesorRepository.save(new Profesor("19293","Pablo","Garcia","ingles",1L));
+        profesorRepository.save(new Profesor("12213123","Alberto","Garcia","ingles",2L));
     }
 
     public List<Profesor> getProfesors() {
+        List<Profesor> profesors = new ArrayList<Profesor>();
+        profesorRepository.findAll().forEach(profesors::add);
         return profesors;
     }
 
     public Profesor getProfesor(Long id) {
-        return profesors.stream() .filter(profesor -> profesor.getId().equals(id)).findFirst().get();
+        return profesorRepository.findById(id).get();
     }
 
     public void addProfesor(Profesor profesor) {
-        profesors.add(profesor);
+        // Si en Id es null le asignamos el ultimo + 1 de la lista
+        profesorRepository.save(profesor);
     }
 
     public void deleteProfesor(Long id) {
-        profesors.removeIf(profesor -> profesor.getId().equals(id));
+        profesorRepository.deleteById(id);
     }
 }
