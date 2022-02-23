@@ -13,29 +13,29 @@ public class ProfesorController {
     @Autowired
     private ProfesorService profesorService;
 
-    @RequestMapping("/profesor/editar/{id}")
+    @RequestMapping("/professor/editar/{id}")
     public String getEdit(@PathVariable Long id) {
 
-        return "Edit profesor " + profesorService.getProfesor(id).toString();
+        return "Edit professor " + profesorService.getProfesor(id).toString();
     }
 
-    @RequestMapping("/profesor/list")
+    @RequestMapping("/professor/list")
     public String getList() {
 
         return profesorService.getProfesors().toString();
     }
 
-    @RequestMapping("/profesor/add")
+    @RequestMapping("/professor/add")
     public String setProfesor() {
-        return "Adding Profesor";
+        return "Adding Professor";
     }
 
-    @RequestMapping("/profesor/details/{id}")
+    @RequestMapping("/professor/details/{id}")
     public String getDetail(@PathVariable Long id) {
         return profesorService.getProfesor(id).toString();
     }
 
-    @RequestMapping("/profesor/delete/{id}")
+    @RequestMapping("/professor/delete/{id}")
     public String delete(@PathVariable Long id) {
         profesorService.deleteProfesor(id);
         return "Deleting Professor";

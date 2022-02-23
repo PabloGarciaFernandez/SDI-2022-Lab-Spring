@@ -11,6 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 public class MarksController {
     @Autowired //Inyectar el servicio
@@ -19,9 +23,16 @@ public class MarksController {
     private UsersService usersService;
     @Autowired
     private NotasFormValidator notasFormValidator;
+    @Autowired
+    private HttpSession httpSession;
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
+        Set<Mark> consultedList = (Set<Mark>) httpSession.getAttribute("consultedList");
+        if (consultedList == null) {
+            consultedList = new HashSet<Mark>();
+        }
+        model.addAttribute("consultedList", consultedList);
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
@@ -29,9 +40,9 @@ public class MarksController {
     @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
     public String setMark(@Validated Mark mark, BindingResult result, Model model) {
         model.addAttribute("usersList", usersService.getUsers());
-        notasFormValidator.validate(mark,result);
-        if(result.hasErrors()){
-            return"mark/add";
+        notasFormValidator.validate(mark, result);
+        if (result.hasErrors()) {
+            return "mark/add";
         }
 
         marksService.addMark(mark);
@@ -67,7 +78,7 @@ public class MarksController {
     @RequestMapping(value = "/mark/edit/{id}", method = RequestMethod.POST)
     public String setEdit(@Validated Mark mark, @PathVariable Long id, BindingResult result) {
         notasFormValidator.validate(mark, result);
-        if(result.hasErrors())
+        if (result.hasErrors())
             return "/mark/edit";
 
         Mark originalMark = marksService.getMark(id);
