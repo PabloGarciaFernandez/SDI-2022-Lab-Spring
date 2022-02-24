@@ -10,16 +10,23 @@
     <form class="form-inline" action="/mark/list">
         <div class="form-group">
             <input name="searchText" type="text" class="form-control" size="50"
-                                       placeholder="Buscar por descripción o nombre del alumno">
+                   placeholder="Buscar por descripción o nombre del alumno">
         </div>
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
     <p>Las notas que actualmente figuran en el sistema son las siguientes:</p>
     <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
-    <script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
         $("#updateButton").click(function () {
-            $("#tableMarks").load('/mark/list/update');
+            var numberPage = [[${param.page}]];
+            var urlUpdate = '/mark/list/update';
+            if (numberPage != null) {
+                urlUpdate += "?page=" + numberPage[0];
+            }
+            $("#tableMarks").load(urlUpdate);
         });
+        /*]]>*/
     </script>
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="tableMarks" id="tableMarks">
@@ -50,7 +57,12 @@
                                 /*<![CDATA[*/
                                 $("#resendButton" + "[[${mark.id}]]").click(function () {
                                     $.get("/mark/[[${mark.id}]]/noresend", function (data) {
-                                        $("#tableMarks").load('/mark/list/update');
+                                        var numberPage = [[${param.page}]];
+                                        var urlUpdate = '/mark/list/update';
+                                        if (numberPage != null) {
+                                            urlUpdate += "?page=" + numberPage[0];
+                                        }
+                                        $("#tableMarks").load(urlUpdate);
                                     });
                                 });
                                 /*]]>*/
@@ -65,7 +77,12 @@
                                 /*<![CDATA[*/
                                 $("#noresendButton" + "[[${mark.id}]]").click(function () {
                                     $.get("/mark/[[${mark.id}]]/resend", function (data) {
-                                        $("#tableMarks").load('/mark/list/update');
+                                        var numberPage = [[${param.page}]];
+                                        var urlUpdate = '/mark/list/update';
+                                        if (numberPage != null) {
+                                            urlUpdate += "?page=" + numberPage[0];
+                                        }
+                                        $("#tableMarks").load(urlUpdate);
                                     });
                                 });
                                 /*]]>*/
@@ -77,6 +94,7 @@
             </tbody>
         </table>
     </div>
+    <footer th:replace="fragments/pagination"/>
 </div>
 
 <footer th:replace="fragments/footer"/>
